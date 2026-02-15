@@ -38,6 +38,7 @@ export default function Game() {
   const startTimeRef = useRef<number>(Date.now());
   const cpuPlansRef = useRef<Record<string, CpuPlan>>({});
   const playerAnswerRef = useRef<string[]>([]);
+  const hasJudgedRef = useRef(false);
 
   const question = questions[questionIndex];
 
@@ -54,6 +55,7 @@ export default function Game() {
     setTimeLeft(TOTAL_TIME);
     startTimeRef.current = Date.now();
     playerAnswerRef.current = [];
+    hasJudgedRef.current = false;
     setTypedText('');
 
     const plans: Record<string, CpuPlan> = {};
@@ -87,7 +89,8 @@ export default function Game() {
       const remaining = Math.max(0, TOTAL_TIME - elapsed / 1000);
       setTimeLeft(remaining);
 
-      players
+      const statePlayers = useGameStore.getState().players;
+      statePlayers
         .filter((player) => player.isCpu && player.status === 'idle')
         .forEach((cpu) => {
           const plan = cpuPlansRef.current[cpu.id];
@@ -102,7 +105,7 @@ export default function Game() {
     }, 200);
 
     return () => clearInterval(timer);
-  }, [players, updatePlayer]);
+  }, [updatePlayer]);
 
   const player = useMemo(() => players.find((p) => !p.isCpu), [players]);
 
@@ -123,7 +126,8 @@ export default function Game() {
     (timeLeft <= 0 || players.every((p) => p.status === 'answered'));
 
   useEffect(() => {
-    if (!shouldJudge) return;
+    if (!shouldJudge || hasJudgedRef.current) return;
+    hasJudgedRef.current = true;
 
     setJudging(true);
     setPhase('judging');
