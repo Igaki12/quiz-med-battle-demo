@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { playTone } from '../utils/audio';
+import { playTone, unlockAudio } from '../utils/audio';
 import { useGameStore } from '../store/gameStore';
 
 const rooms = [
@@ -17,6 +17,7 @@ export default function Lobby() {
   const seOn = useGameStore((s) => s.seOn);
 
   const handleEnter = () => {
+    unlockAudio();
     setLoading(true);
     if (seOn) playTone(520, 120, 0.12, 'triangle');
     setTimeout(() => {

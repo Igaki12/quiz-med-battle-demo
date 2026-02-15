@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { startBgm, stopBgm, playTone } from '../utils/audio';
+import { startBgm, stopBgm, playTone, unlockAudio } from '../utils/audio';
 
 export default function Header() {
   const bgmOn = useGameStore((s) => s.bgmOn);
@@ -17,6 +17,7 @@ export default function Header() {
   }, [bgmOn]);
 
   const handleSeClick = () => {
+    unlockAudio();
     if (seOn) {
       playTone(520, 120, 0.12, 'triangle');
     }
@@ -24,6 +25,7 @@ export default function Header() {
   };
 
   const handleBgmClick = () => {
+    unlockAudio();
     if (seOn) {
       playTone(420, 120, 0.12, 'triangle');
     }

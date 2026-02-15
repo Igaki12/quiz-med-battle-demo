@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
-import { playTone } from '../utils/audio';
+import { playTone, unlockAudio } from '../utils/audio';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ export default function Landing() {
   const seOn = useGameStore((s) => s.seOn);
 
   const handleStart = () => {
+    unlockAudio();
     initPlayers(name.trim() || 'あなた');
     if (seOn) playTone(640, 140, 0.15, 'triangle');
     navigate('/lobby');

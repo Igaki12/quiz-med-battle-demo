@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { questions } from '../data/questions';
 import { useGameStore } from '../store/gameStore';
-import { playTone } from '../utils/audio';
+import { playTone, unlockAudio } from '../utils/audio';
 
 type CpuPlan = {
   timeMs: number;
@@ -108,6 +108,7 @@ export default function Game() {
 
   const handleSubmit = () => {
     if (!player || player.status === 'answered') return;
+    unlockAudio();
     const elapsed = Date.now() - startTimeRef.current;
     playerAnswerRef.current = selectedAnswers;
     updatePlayer(player.id, {

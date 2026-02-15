@@ -1,4 +1,5 @@
 let audioContext: AudioContext | null = null;
+let audioUnlocked = false;
 let bgmNodes: { osc: OscillatorNode; gain: GainNode; lfo: OscillatorNode; lfoGain: GainNode } | null = null;
 
 const getContext = () => {
@@ -6,12 +7,25 @@ const getContext = () => {
     audioContext = new AudioContext();
   }
   if (audioContext.state === 'suspended') {
-    void audioContext.resume();
+    void audioContext.resume().catch(() => undefined);
   }
   return audioContext;
 };
 
+export const unlockAudio = () => {
+  try {
+    const ctx = getContext();
+    if (ctx.state === 'suspended') {
+      void ctx.resume();
+    }
+    audioUnlocked = true;
+  } catch {
+    audioUnlocked = false;
+  }
+};
+
 export const playTone = (frequency: number, durationMs: number, volume = 0.2, type: OscillatorType = 'sine') => {
+  if (!audioUnlocked) return;
   const ctx = getContext();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -25,6 +39,7 @@ export const playTone = (frequency: number, durationMs: number, volume = 0.2, ty
 };
 
 export const startBgm = () => {
+  if (!audioUnlocked) return;
   if (bgmNodes) return;
   const ctx = getContext();
   const osc = ctx.createOscillator();
