@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/header.tsx","./src/components/phoneframe.tsx","./src/data/questions.ts","./src/pages/game.tsx","./src/pages/landing.tsx","./src/pages/lobby.tsx","./src/pages/result.tsx","./src/pages/waiting.tsx","./src/store/gamestore.ts","./src/utils/audio.ts"],"version":"5.9.3"}
