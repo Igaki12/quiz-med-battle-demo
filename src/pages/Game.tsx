@@ -95,7 +95,7 @@ export default function Game() {
       } else {
         setQuestionIndex(questionIndex + 1);
       }
-    }, 2400);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, [navigate, question, questionIndex, seOn, setPhase, setQuestionIndex, updatePlayer]);
@@ -251,8 +251,13 @@ export default function Game() {
       {judging && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/70">
           <div className="fantasy-panel rounded-2xl px-6 py-5 text-center">
-            <p className="font-display text-2xl text-gild-200">判定中...</p>
-            <p className="mt-2 text-xs text-gild-400">魔法陣が答えを照合しています</p>
+            <p className="font-display text-2xl text-gild-200">正答</p>
+            <p className="mt-2 text-xs text-gild-400">
+              {question.options
+                .filter((option) => question.correctAnswers.includes(option.id))
+                .map((option) => option.text)
+                .join(' / ')}
+            </p>
           </div>
         </div>
       )}
