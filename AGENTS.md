@@ -22,7 +22,7 @@
 * **Animation:** Framer Motion (回答時のカットイン、スコア変動、正誤判定演出)
 * **State Management:** Zustand (ゲーム進行、スコア、オーディオ設定管理)
 * **Audio:** Web Audio API または `use-sound` (BGM、SE再生)
-* **Routing:** React Router
+* **Routing:** React Router（**HashRouter**）
 
 ## デザイン & UXコンセプト
 
@@ -39,6 +39,7 @@
 
 
 * **サウンド:** 没入感を高めるBGMと、爽快感のあるSE（決定音、正解音）。**常時表示のミュートボタン**を実装する。
+* **Web Audio注意:** 自動再生制限があるため、**ユーザー操作後にAudioContextを解錠**してから再生する。
 
 ## 画面仕様と遷移
 
@@ -103,6 +104,7 @@
 * 正解者の中で、回答タイムが最も早い人: **+20pt**
 * それ以外の正解者: **+10pt**
 * 不正解: **0pt**
+* **正答表示:** 判定フェーズで正答選択肢を表示する（**4秒間表示**）。
 
 
 
@@ -217,5 +219,5 @@ const questions: Question[] = [
 
 ## ビルド・デプロイ設定
 
-* **Vite Config:** `base: '/docs/'` (またはリポジトリ名に合わせる), `outDir: 'docs'`
+* **Vite Config:** `base: '/quiz-med-battle-demo/'`, `outDir: 'docs'`
 * **Build:** GitHub Pagesでのホスティングを前提とした静的出力。
