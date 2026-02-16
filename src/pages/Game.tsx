@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { questions } from '../data/questions';
@@ -41,6 +41,64 @@ export default function Game() {
   const hasJudgedRef = useRef(false);
 
   const question = questions[questionIndex];
+
+  const finalizeJudgement = useCallback(() => {
+    if (hasJudgedRef.current) return;
+    hasJudgedRef.current = true;
+    setJudging(true);
+    setPhase('judging');
+
+    const statePlayers = useGameStore.getState().players;
+    const correctSet = question.correctAnswers;
+    const statePlayer = statePlayers.find((p) => !p.isCpu);
+    const playerIsCorrect =
+      statePlayer && statePlayer.status === 'answered'
+        ? arraysEqual(playerAnswerRef.current, correctSet)
+        : false;
+
+    statePlayers.forEach((p) => {
+      if (p.status !== 'answered') {
+        updatePlayer(p.id, {
+          status: 'answered',
+          answerTimeMs: TOTAL_TIME * 1000,
+          wasCorrect: false
+        });
+      }
+    });
+
+    if (statePlayer) {
+      updatePlayer(statePlayer.id, { wasCorrect: playerIsCorrect });
+    }
+
+    const correctPlayers = statePlayers
+      .map((p) => ({ ...p }))
+      .filter((p) => (p.id === 'player' ? playerIsCorrect : p.wasCorrect === true));
+
+    const fastest = Math.min(...correctPlayers.map((p) => p.answerTimeMs ?? Infinity));
+
+    statePlayers.forEach((p) => {
+      const isCorrect = p.id === 'player' ? playerIsCorrect : p.wasCorrect;
+      if (!isCorrect) return;
+      const isFastest = (p.answerTimeMs ?? Infinity) === fastest;
+      const delta = isFastest ? 20 : 10;
+      updatePlayer(p.id, { score: p.score + delta });
+    });
+
+    if (seOn) {
+      playTone(playerIsCorrect ? 880 : 220, 220, 0.15, 'square');
+    }
+
+    const timeout = setTimeout(() => {
+      if (questionIndex >= questions.length - 1) {
+        setPhase('result');
+        navigate('/result');
+      } else {
+        setQuestionIndex(questionIndex + 1);
+      }
+    }, 2400);
+
+    return () => clearTimeout(timeout);
+  }, [navigate, question, questionIndex, seOn, setPhase, setQuestionIndex, updatePlayer]);
 
   useEffect(() => {
     if (players.length === 0) {
@@ -102,10 +160,16 @@ export default function Game() {
             });
           }
         });
+
+      const allAnswered = statePlayers.every((p) => p.status === 'answered');
+      if (!hasJudgedRef.current && (remaining <= 0 || allAnswered)) {
+        finalizeJudgement();
+        clearInterval(timer);
+      }
     }, 200);
 
     return () => clearInterval(timer);
-  }, [updatePlayer]);
+  }, [finalizeJudgement, updatePlayer, questionIndex]);
 
   const player = useMemo(() => players.find((p) => !p.isCpu), [players]);
 
@@ -121,77 +185,6 @@ export default function Game() {
     if (seOn) playTone(560, 120, 0.12, 'triangle');
   };
 
-  const shouldJudge =
-    !judging &&
-    (timeLeft <= 0 || players.every((p) => p.status === 'answered'));
-
-  useEffect(() => {
-    if (!shouldJudge || hasJudgedRef.current) return;
-    hasJudgedRef.current = true;
-
-    setJudging(true);
-    setPhase('judging');
-
-    const correctSet = question.correctAnswers;
-    const playerIsCorrect =
-      player && player.status === 'answered'
-        ? arraysEqual(playerAnswerRef.current, correctSet)
-        : false;
-
-    players.forEach((p) => {
-      if (p.status !== 'answered') {
-        updatePlayer(p.id, {
-          status: 'answered',
-          answerTimeMs: TOTAL_TIME * 1000,
-          wasCorrect: false
-        });
-      }
-    });
-
-    if (player) {
-      updatePlayer(player.id, { wasCorrect: playerIsCorrect });
-    }
-
-    const correctPlayers = players
-      .map((p) => ({ ...p }))
-      .filter((p) => (p.id === 'player' ? playerIsCorrect : p.wasCorrect === true));
-
-    const fastest = Math.min(...correctPlayers.map((p) => p.answerTimeMs ?? Infinity));
-
-    players.forEach((p) => {
-      const isCorrect = p.id === 'player' ? playerIsCorrect : p.wasCorrect;
-      if (!isCorrect) return;
-      const isFastest = (p.answerTimeMs ?? Infinity) === fastest;
-      const delta = isFastest ? 20 : 10;
-      updatePlayer(p.id, { score: p.score + delta });
-    });
-
-    if (seOn) {
-      playTone(playerIsCorrect ? 880 : 220, 220, 0.15, 'square');
-    }
-
-    const timeout = setTimeout(() => {
-      if (questionIndex >= questions.length - 1) {
-        setPhase('result');
-        navigate('/result');
-      } else {
-        setQuestionIndex(questionIndex + 1);
-      }
-    }, 2400);
-
-    return () => clearTimeout(timeout);
-  }, [
-    shouldJudge,
-    navigate,
-    player,
-    players,
-    question,
-    questionIndex,
-    seOn,
-    setPhase,
-    setQuestionIndex,
-    updatePlayer
-  ]);
 
   if (!question) return null;
 
