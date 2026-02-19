@@ -14,7 +14,9 @@ export default function Header() {
     const map: Record<typeof bgmTrack, string> = {
       lobby: `${base}audio/Dawn_s_First_Ascent.mp3`,
       arena: `${base}audio/Aetherium_Arena.mp3`,
-      crimson: `${base}audio/Crimson_Horizon.mp3`
+      crimson: `${base}audio/Crimson_Horizon.mp3`,
+      arcana: `${base}audio/The_Gauntlet_of_Triumph.mp3`,
+      inquisitor: `${base}audio/The_Grand_Inquisitor_s_Gambit.mp3`
     };
     setBgmSource(map[bgmTrack]);
     if (bgmOn) {

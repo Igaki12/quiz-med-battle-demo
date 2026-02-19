@@ -22,7 +22,7 @@ type GameState = {
   phase: GamePhase;
   bgmOn: boolean;
   seOn: boolean;
-  bgmTrack: 'lobby' | 'arena' | 'crimson';
+  bgmTrack: 'lobby' | 'arena' | 'crimson' | 'arcana' | 'inquisitor';
   setPlayerName: (name: string) => void;
   initPlayers: (name: string) => void;
   updatePlayer: (id: string, data: Partial<Player>) => void;
@@ -33,7 +33,7 @@ type GameState = {
   setPhase: (phase: GamePhase) => void;
   toggleBgm: () => void;
   toggleSe: () => void;
-  setBgmTrack: (track: 'lobby' | 'arena' | 'crimson') => void;
+  setBgmTrack: (track: 'lobby' | 'arena' | 'crimson' | 'arcana' | 'inquisitor') => void;
 };
 
 const cpuNames = ['リオ', 'セシル', 'アリス', 'ユウキ', 'サラ'];

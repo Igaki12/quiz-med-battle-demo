@@ -18,7 +18,15 @@ export default function Lobby() {
   const setBgmTrack = useGameStore((s) => s.setBgmTrack);
 
   const handleEnter = (roomName: string) => {
-    setBgmTrack(roomName === '蒼穹の書架' ? 'crimson' : 'arena');
+    if (roomName === '蒼穹の書架') {
+      setBgmTrack('crimson');
+    } else if (roomName === 'アルカナ図書館') {
+      setBgmTrack('arcana');
+    } else if (roomName === '深層迷宮の間') {
+      setBgmTrack('inquisitor');
+    } else {
+      setBgmTrack('arena');
+    }
     unlockAudio();
     setLoading(true);
     if (seOn) playTone(520, 120, 0.12, 'triangle');

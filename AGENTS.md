@@ -204,7 +204,9 @@ const questions: Question[] = [
 
 * **BGM:**
 * Title/Lobby: `Dawn_s_First_Ascent.mp3`
+* Lobby（アルカナ図書館を選択）: `The_Gauntlet_of_Triumph.mp3`
 * Lobby（蒼穹の書架を選択）: `Crimson_Horizon.mp3`
+* Lobby（深層迷宮の間を選択）: `The_Grand_Inquisitor_s_Gambit.mp3`
 * Lobby（それ以外の部屋）/Game: `Aetherium_Arena.mp3`
 * Result: ファンファーレ風の明るい曲。
 
