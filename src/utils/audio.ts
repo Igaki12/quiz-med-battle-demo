@@ -45,7 +45,7 @@ export const playTone = (frequency: number, durationMs: number, volume = 0.2, ty
 
 export const startBgm = () => {
   if (!bgmAudio) {
-    bgmAudio = new Audio(`${import.meta.env.BASE_URL}audio/Aetherium_Arena.mp3`);
+    bgmAudio = new Audio();
     bgmAudio.loop = true;
     bgmAudio.volume = 0.35;
   }
@@ -54,6 +54,20 @@ export const startBgm = () => {
     return;
   }
   void bgmAudio.play().catch(() => undefined);
+};
+
+export const setBgmSource = (src: string) => {
+  if (!bgmAudio) {
+    bgmAudio = new Audio();
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.35;
+  }
+  if (bgmAudio.src === src) return;
+  const wasPlaying = !bgmAudio.paused;
+  bgmAudio.src = src;
+  if (wasPlaying) {
+    void bgmAudio.play().catch(() => undefined);
+  }
 };
 
 export const stopBgm = () => {

@@ -15,8 +15,10 @@ export default function Lobby() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const seOn = useGameStore((s) => s.seOn);
+  const setBgmTrack = useGameStore((s) => s.setBgmTrack);
 
-  const handleEnter = () => {
+  const handleEnter = (roomName: string) => {
+    setBgmTrack(roomName === '蒼穹の書架' ? 'crimson' : 'arena');
     unlockAudio();
     setLoading(true);
     if (seOn) playTone(520, 120, 0.12, 'triangle');
@@ -38,7 +40,7 @@ export default function Lobby() {
           <motion.button
             key={room.id}
             whileTap={{ scale: 0.98 }}
-            onClick={handleEnter}
+            onClick={() => handleEnter(room.name)}
             className="fantasy-panel w-full rounded-xl px-4 py-3 text-left"
           >
             <div className="flex items-center justify-between">

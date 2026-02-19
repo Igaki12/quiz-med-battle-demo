@@ -203,8 +203,9 @@ const questions: Question[] = [
 ## サウンドアセット要件 (Mock/Free Assets)
 
 * **BGM:**
-* Title/Lobby: 静かだが緊張感のあるアンビエント。
-* Game: アップテンポで焦らせるような曲（「Thinking Time」系）。
+* Title/Lobby: `Dawn_s_First_Ascent.mp3`
+* Lobby（蒼穹の書架を選択）: `Crimson_Horizon.mp3`
+* Lobby（それ以外の部屋）/Game: `Aetherium_Arena.mp3`
 * Result: ファンファーレ風の明るい曲。
 
 

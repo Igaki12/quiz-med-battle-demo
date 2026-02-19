@@ -22,6 +22,7 @@ type GameState = {
   phase: GamePhase;
   bgmOn: boolean;
   seOn: boolean;
+  bgmTrack: 'lobby' | 'arena' | 'crimson';
   setPlayerName: (name: string) => void;
   initPlayers: (name: string) => void;
   updatePlayer: (id: string, data: Partial<Player>) => void;
@@ -32,6 +33,7 @@ type GameState = {
   setPhase: (phase: GamePhase) => void;
   toggleBgm: () => void;
   toggleSe: () => void;
+  setBgmTrack: (track: 'lobby' | 'arena' | 'crimson') => void;
 };
 
 const cpuNames = ['リオ', 'セシル', 'アリス', 'ユウキ', 'サラ'];
@@ -44,6 +46,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   phase: 'setup',
   bgmOn: true,
   seOn: true,
+  bgmTrack: 'arena',
   setPlayerName: (name) => set({ playerName: name }),
   initPlayers: (name) => {
     const basePlayers: Player[] = [
@@ -85,5 +88,6 @@ export const useGameStore = create<GameState>((set, get) => ({
   clearAnswers: () => set({ selectedAnswers: [] }),
   setPhase: (phase) => set({ phase }),
   toggleBgm: () => set({ bgmOn: !get().bgmOn }),
-  toggleSe: () => set({ seOn: !get().seOn })
+  toggleSe: () => set({ seOn: !get().seOn }),
+  setBgmTrack: (track) => set({ bgmTrack: track })
 }));

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
@@ -8,7 +8,12 @@ export default function Landing() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const initPlayers = useGameStore((s) => s.initPlayers);
+  const setBgmTrack = useGameStore((s) => s.setBgmTrack);
   const seOn = useGameStore((s) => s.seOn);
+
+  useEffect(() => {
+    setBgmTrack('lobby');
+  }, [setBgmTrack]);
 
   const handleStart = () => {
     unlockAudio();
