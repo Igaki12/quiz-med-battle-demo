@@ -45,7 +45,7 @@ export const playTone = (frequency: number, durationMs: number, volume = 0.2, ty
 
 export const startBgm = () => {
   if (!bgmAudio) {
-    bgmAudio = new Audio('/audio/Aetherium_Arena.mp3');
+    bgmAudio = new Audio(`${import.meta.env.BASE_URL}audio/Aetherium_Arena.mp3`);
     bgmAudio.loop = true;
     bgmAudio.volume = 0.35;
   }
