@@ -1,6 +1,7 @@
 let audioContext: AudioContext | null = null;
+let bgmAudio: HTMLAudioElement | null = null;
 let audioUnlocked = false;
-let bgmNodes: { osc: OscillatorNode; gain: GainNode; lfo: OscillatorNode; lfoGain: GainNode } | null = null;
+let pendingBgmPlay = false;
 
 const getContext = () => {
   if (!audioContext) {
@@ -19,6 +20,10 @@ export const unlockAudio = () => {
       void ctx.resume();
     }
     audioUnlocked = true;
+    if (bgmAudio && (bgmAudio.paused || pendingBgmPlay)) {
+      pendingBgmPlay = false;
+      void bgmAudio.play().catch(() => undefined);
+    }
   } catch {
     audioUnlocked = false;
   }
@@ -39,39 +44,19 @@ export const playTone = (frequency: number, durationMs: number, volume = 0.2, ty
 };
 
 export const startBgm = () => {
-  if (!audioUnlocked) return;
-  if (bgmNodes) return;
-  const ctx = getContext();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const lfo = ctx.createOscillator();
-  const lfoGain = ctx.createGain();
-
-  osc.type = 'triangle';
-  osc.frequency.value = 110;
-  gain.gain.value = 0.04;
-
-  lfo.frequency.value = 0.18;
-  lfoGain.gain.value = 20;
-
-  lfo.connect(lfoGain);
-  lfoGain.connect(osc.frequency);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-  lfo.start();
-
-  bgmNodes = { osc, gain, lfo, lfoGain };
+  if (!bgmAudio) {
+    bgmAudio = new Audio('/audio/Aetherium_Arena.mp3');
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.35;
+  }
+  if (!audioUnlocked) {
+    pendingBgmPlay = true;
+    return;
+  }
+  void bgmAudio.play().catch(() => undefined);
 };
 
 export const stopBgm = () => {
-  if (!bgmNodes) return;
-  bgmNodes.osc.stop();
-  bgmNodes.lfo.stop();
-  bgmNodes.osc.disconnect();
-  bgmNodes.lfo.disconnect();
-  bgmNodes.gain.disconnect();
-  bgmNodes.lfoGain.disconnect();
-  bgmNodes = null;
+  if (!bgmAudio) return;
+  bgmAudio.pause();
 };
