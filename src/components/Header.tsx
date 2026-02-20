@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { startBgm, stopBgm, playTone, unlockAudio, setBgmSource } from '../utils/audio';
+import { startBgm, stopBgm, playTone, unlockAudio, setBgmSource, setBgmPlaylist } from '../utils/audio';
 
 export default function Header() {
   const bgmOn = useGameStore((s) => s.bgmOn);
@@ -18,7 +18,22 @@ export default function Header() {
       arcana: `${base}audio/The_Gauntlet_of_Triumph.mp3`,
       inquisitor: `${base}audio/The_Grand_Inquisitor_s_Gambit.mp3`
     };
-    setBgmSource(map[bgmTrack]);
+    if (bgmTrack === 'arena') {
+      setBgmPlaylist([
+        `${base}audio/The_Final_Question.mp3`,
+        `${base}audio/The_Accordion_s_Anarchy.mp3`,
+        `${base}audio/The_Final_Countdown.mp3`,
+        `${base}audio/The_Grand_Gauntlet.mp3`,
+        `${base}audio/The_Grand_Triumvirate.mp3`
+      ]);
+    } else if (bgmTrack === 'crimson') {
+      setBgmPlaylist([
+        `${base}audio/Crimson_Horizon.mp3`,
+        `${base}audio/Aetherium_Arena.mp3`
+      ]);
+    } else {
+      setBgmSource(map[bgmTrack]);
+    }
     if (bgmOn) {
       startBgm();
     } else {

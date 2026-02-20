@@ -205,9 +205,14 @@ const questions: Question[] = [
 * **BGM:**
 * Title/Lobby: `Dawn_s_First_Ascent.mp3`
 * Lobby（アルカナ図書館を選択）: `The_Gauntlet_of_Triumph.mp3`
-* Lobby（蒼穹の書架を選択）: `Crimson_Horizon.mp3`
+* Lobby（蒼穹の書架を選択）: `Crimson_Horizon.mp3` / `Aetherium_Arena.mp3` を順番ループ
 * Lobby（深層迷宮の間を選択）: `The_Grand_Inquisitor_s_Gambit.mp3`
-* Lobby（それ以外の部屋）/Game: `Aetherium_Arena.mp3`
+* Lobby（それ以外の部屋）/Game: 以下の5曲を順番にループ再生
+* `The_Final_Question.mp3`
+* `The_Accordion_s_Anarchy.mp3`
+* `The_Final_Countdown.mp3`
+* `The_Grand_Gauntlet.mp3`
+* `The_Grand_Triumvirate.mp3`
 * Result: ファンファーレ風の明るい曲。
 
 

@@ -7,8 +7,8 @@ import { useGameStore } from '../store/gameStore';
 const rooms = [
   { id: 1, name: 'アルカナ図書館', status: '満員' },
   { id: 2, name: '深層迷宮の間', status: '空きあり' },
-  { id: 3, name: '星詠みの塔', status: '満員' },
-  { id: 4, name: '蒼穹の書架', status: '空きあり' }
+  { id: 3, name: '星詠みの塔(ランダムBGM5曲ループ)', status: '空きあり' },
+  { id: 4, name: '蒼穹の書架(テーマBGM2曲ループ)', status: '空きあり' }
 ];
 
 export default function Lobby() {

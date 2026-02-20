@@ -2,6 +2,9 @@ let audioContext: AudioContext | null = null;
 let bgmAudio: HTMLAudioElement | null = null;
 let audioUnlocked = false;
 let pendingBgmPlay = false;
+let playlistSources: string[] = [];
+let playlistIndex = 0;
+let handleEnded: (() => void) | null = null;
 
 const getContext = () => {
   if (!audioContext) {
@@ -62,11 +65,51 @@ export const setBgmSource = (src: string) => {
     bgmAudio.loop = true;
     bgmAudio.volume = 0.35;
   }
+  if (handleEnded) {
+    bgmAudio.removeEventListener('ended', handleEnded);
+    handleEnded = null;
+  }
+  playlistSources = [];
   if (bgmAudio.src === src) return;
   const wasPlaying = !bgmAudio.paused;
+  bgmAudio.loop = true;
   bgmAudio.src = src;
   if (wasPlaying) {
     void bgmAudio.play().catch(() => undefined);
+  }
+};
+
+export const setBgmPlaylist = (sources: string[]) => {
+  if (!bgmAudio) {
+    bgmAudio = new Audio();
+    bgmAudio.loop = false;
+    bgmAudio.volume = 0.35;
+  }
+  playlistSources = sources;
+  playlistIndex = 0;
+  if (handleEnded) {
+    bgmAudio.removeEventListener('ended', handleEnded);
+  }
+  handleEnded = () => {
+    if (playlistSources.length === 0) return;
+    playlistIndex = (playlistIndex + 1) % playlistSources.length;
+    bgmAudio!.src = playlistSources[playlistIndex];
+    if (audioUnlocked) {
+      void bgmAudio!.play().catch(() => undefined);
+    } else {
+      pendingBgmPlay = true;
+    }
+  };
+  bgmAudio.addEventListener('ended', handleEnded);
+  bgmAudio.loop = false;
+  const nextSrc = playlistSources[0];
+  if (!nextSrc) return;
+  const wasPlaying = !bgmAudio.paused;
+  bgmAudio.src = nextSrc;
+  if (wasPlaying && audioUnlocked) {
+    void bgmAudio.play().catch(() => undefined);
+  } else if (!audioUnlocked) {
+    pendingBgmPlay = true;
   }
 };
 
