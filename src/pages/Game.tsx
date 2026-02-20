@@ -226,7 +226,7 @@ export default function Game() {
                   : 'fantasy-panel text-gild-200'
               }`}
             >
-              {optionLabel}. {option.text}
+              {optionLabel}.　{option.text}
             </button>
           );
         })}
@@ -261,7 +261,7 @@ export default function Game() {
                 .map((option, index) => {
                   if (!question.correctAnswers.includes(option.id)) return null;
                   const optionLabel = String.fromCharCode(97 + index);
-                  return `${optionLabel}.　${option.text}`;
+                  return `${optionLabel}. ${option.text}`;
                 })
                 .filter((option) => option !== null)
                 .join(' / ')}
