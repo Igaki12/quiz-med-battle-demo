@@ -226,7 +226,7 @@ export default function Game() {
                   : 'fantasy-panel text-gild-200'
               }`}
             >
-              {optionLabel}.　{option.text}
+              {optionLabel}. {option.text}
             </button>
           );
         })}
@@ -256,7 +256,7 @@ export default function Game() {
           <div className="fantasy-panel rounded-2xl px-6 py-5 text-center">
             <p className="font-display text-2xl text-gild-200">正答</p>
             <p className="mt-1 text-[10px] text-gild-200">出典: {question.sourceId}</p>
-            <p className="mt-2 text-xs text-gild-400">
+            <p className="mt-2 text-sm text-gild-400">
               {question.options
                 .map((option, index) => {
                   if (!question.correctAnswers.includes(option.id)) return null;
