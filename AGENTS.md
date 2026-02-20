@@ -124,7 +124,9 @@
 
 ## データ構造 (src/data/questions.ts)
 
-以下の形式でデータを保持する。`correctAnswers` は配列で保持し、複数回答に対応する。
+`questions.ts` で大量の問題データを一括管理する。今後も追加・削除・差し替えが適宜行われる前提で、問題の順序や件数に依存しない実装にすること。
+
+以下の形式でデータを保持する。`correctAnswers` は配列で保持し、複数回答に対応する。`sourceId` は出典IDで、例として `119A75` は「第119回医師国家試験の A 問題・75 問目」を意味する。
 
 ```typescript
 type Question = {
@@ -132,6 +134,7 @@ type Question = {
   text: string;
   options: { id: string; text: string }[];
   correctAnswers: string[]; // 複数正解に対応 (例: ['c', 'e'])
+  sourceId: string; // 出典ID (例: '119A75')
 };
 
 // 問題データ
