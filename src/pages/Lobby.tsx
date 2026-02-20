@@ -6,23 +6,24 @@ import { useGameStore } from '../store/gameStore';
 import { questions } from '../data/questions';
 
 const rooms = [
-  { id: 1, name: 'アルカナ図書館', status: '満員' },
-  { id: 2, name: '深層迷宮の間', status: '空きあり' },
-  { id: 3, name: '星詠みの塔(ランダムBGM5曲ループ)', status: '空きあり' },
-  { id: 4, name: '蒼穹の書架(テーマBGM2曲ループ)', status: '空きあり' }
+  { id: 1, name: 'アルカナ図書館(5問)', status: 'あと1枠' },
+  { id: 2, name: '深層迷宮の間(5問選択肢ランダム)', status: '空きあり' },
+  { id: 3, name: '星詠みの塔(10問)', status: '空きあり' },
+  { id: 4, name: '蒼穹の書架(10問選択肢ランダム)', status: '空きあり' }
 ];
 
 type RoomConfig = {
-  name: string;
+  id: number;
   questionCount: number;
+  shuffleOptions?: boolean;
   filter?: (candidate: (typeof questions)[number]) => boolean;
 };
 
-const roomConfigs: Record<string, RoomConfig> = {
-  'アルカナ図書館': { name: 'アルカナ図書館', questionCount: 5 },
-  '深層迷宮の間': { name: '深層迷宮の間', questionCount: 5 },
-  '星詠みの塔(ランダムBGM5曲ループ)': { name: '星詠みの塔(ランダムBGM5曲ループ)', questionCount: 5 },
-  '蒼穹の書架(テーマBGM2曲ループ)': { name: '蒼穹の書架(テーマBGM2曲ループ)', questionCount: 5 }
+const roomConfigs: Record<number, RoomConfig> = {
+  1: { id: 1, questionCount: 5 },
+  2: { id: 2, questionCount: 5, shuffleOptions: true },
+  3: { id: 3, questionCount: 10 },
+  4: { id: 4, questionCount: 10, shuffleOptions: true }
 };
 
 const pickRandomQuestions = (count: number, list: typeof questions) => {
@@ -34,6 +35,28 @@ const pickRandomQuestions = (count: number, list: typeof questions) => {
   return pool.slice(0, Math.min(count, pool.length));
 };
 
+const optionIds = ['a', 'b', 'c', 'd', 'e'] as const;
+
+const shuffleOptionsForQuestion = (question: (typeof questions)[number]) => {
+  const pool = [...question.options];
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const idMap = new Map<string, string>();
+  pool.forEach((option, index) => {
+    idMap.set(option.id, optionIds[index] ?? option.id);
+  });
+  const shuffledOptions = pool.map((option, index) => ({
+    ...option,
+    id: optionIds[index] ?? option.id
+  }));
+  const shuffledCorrect = question.correctAnswers
+    .map((id) => idMap.get(id))
+    .filter((id): id is string => Boolean(id));
+  return { ...question, options: shuffledOptions, correctAnswers: shuffledCorrect };
+};
+
 export default function Lobby() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -42,12 +65,12 @@ export default function Lobby() {
   const setQuestionSet = useGameStore((s) => s.setQuestionSet);
   const setQuestionIndex = useGameStore((s) => s.setQuestionIndex);
 
-  const handleEnter = (roomName: string) => {
-    if (roomName === '蒼穹の書架') {
+  const handleEnter = (roomId: number) => {
+    if (roomId === 4) {
       setBgmTrack('crimson');
-    } else if (roomName === 'アルカナ図書館') {
+    } else if (roomId === 1) {
       setBgmTrack('arcana');
-    } else if (roomName === '深層迷宮の間') {
+    } else if (roomId === 2) {
       setBgmTrack('inquisitor');
     } else {
       setBgmTrack('arena');
@@ -55,9 +78,12 @@ export default function Lobby() {
     unlockAudio();
     setLoading(true);
     if (seOn) playTone(520, 120, 0.12, 'triangle');
-    const config = roomConfigs[roomName] ?? { name: roomName, questionCount: 5 };
+    const config = roomConfigs[roomId] ?? { id: roomId, questionCount: 5 };
     const filtered = config.filter ? questions.filter(config.filter) : questions;
-    const selected = pickRandomQuestions(config.questionCount, filtered);
+    const picked = pickRandomQuestions(config.questionCount, filtered);
+    const selected = config.shuffleOptions
+      ? picked.map((question) => shuffleOptionsForQuestion(question))
+      : picked;
     setQuestionSet(selected);
     setQuestionIndex(0);
     setTimeout(() => {
@@ -78,7 +104,7 @@ export default function Lobby() {
           <motion.button
             key={room.id}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handleEnter(room.name)}
+            onClick={() => handleEnter(room.id)}
             className="fantasy-panel w-full rounded-xl px-4 py-3 text-left"
           >
             <div className="flex items-center justify-between">
