@@ -50,11 +50,11 @@ export const questions: Question[] = [
     id: 4,
     text: "疾患と好発部位の組合せで誤っているのはどれか。",
     options: [
-      { id: 'a', text: "疥　癬 外陰部" },
-      { id: 'b', text: "ケロイド 耳　介" },
-      { id: 'c', text: "脂腺母斑 頭　部" },
-      { id: 'd', text: "血管性浮腫 口　唇" },
-      { id: 'e', text: "ケラトアカントーマ 臍　部" }
+      { id: 'a', text: "疥　癬 --- 外陰部" },
+      { id: 'b', text: "ケロイド --- 耳　介" },
+      { id: 'c', text: "脂腺母斑 --- 頭　部" },
+      { id: 'd', text: "血管性浮腫 --- 口　唇" },
+      { id: 'e', text: "ケラトアカントーマ --- 臍　部" }
     ],
     correctAnswers: ['e'],
     sourceId: "119A04"
@@ -128,11 +128,11 @@ export const questions: Question[] = [
     id: 10,
     text: "薬剤と尿細管作用部位の組合せで正しいのはどれか。",
     options: [
-      { id: 'a', text: "SGLT2 阻害薬 近位尿細管" },
-      { id: 'b', text: "抗アルドステロン薬 Henle の上行脚" },
-      { id: 'c', text: "サイアザイド系利尿薬 集合管" },
-      { id: 'd', text: "バソプレシン V2 受容体拮抗薬 遠位尿細管" },
-      { id: 'e', text: "ループ利尿薬 Henle の下行脚" }
+      { id: 'a', text: "SGLT2 阻害薬 --- 近位尿細管" },
+      { id: 'b', text: "抗アルドステロン薬 --- Henle の上行脚" },
+      { id: 'c', text: "サイアザイド系利尿薬 --- 集合管" },
+      { id: 'd', text: "バソプレシン V2 受容体拮抗薬 --- 遠位尿細管" },
+      { id: 'e', text: "ループ利尿薬 --- Henle の下行脚" }
     ],
     correctAnswers: ['a'],
     sourceId: "119A10"
@@ -181,11 +181,11 @@ export const questions: Question[] = [
     id: 14,
     text: "疾患とその俗称の組合せで正しいのはどれか。",
     options: [
-      { id: 'a', text: "鶏　眼 うおのめ" },
-      { id: 'b', text: "色素性母斑 とびひ" },
-      { id: 'c', text: "水　痘 みずいぼ" },
-      { id: 'd', text: "麦粒腫 そばかす" },
-      { id: 'e', text: "風　疹 はしか" }
+      { id: 'a', text: "鶏　眼 --- うおのめ" },
+      { id: 'b', text: "色素性母斑 --- とびひ" },
+      { id: 'c', text: "水　痘 --- みずいぼ" },
+      { id: 'd', text: "麦粒腫 --- そばかす" },
+      { id: 'e', text: "風　疹 --- はしか" }
     ],
     correctAnswers: ['a'],
     sourceId: "119B01"
@@ -402,11 +402,11 @@ export const questions: Question[] = [
     id: 31,
     text: "めまいを呈する疾患とその特徴の組合せで誤っているのはどれか。",
     options: [
-      { id: 'a', text: "Ménière 病 難　聴" },
-      { id: 'b', text: "小脳梗塞 運動失調" },
-      { id: 'c', text: "聴神経腫瘍 聴力低下" },
-      { id: 'd', text: "脳幹出血 視力低下" },
-      { id: 'e', text: "パニック症 動　悸" }
+      { id: 'a', text: "Ménière 病 --- 難　聴" },
+      { id: 'b', text: "小脳梗塞 --- 運動失調" },
+      { id: 'c', text: "聴神経腫瘍 --- 聴力低下" },
+      { id: 'd', text: "脳幹出血 --- 視力低下" },
+      { id: 'e', text: "パニック症 --- 動　悸" }
     ],
     correctAnswers: ['d'],
     sourceId: "119B19"
