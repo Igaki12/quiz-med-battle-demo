@@ -212,8 +212,9 @@ export default function Game() {
       </motion.div>
 
       <div className="space-y-2">
-        {question.options.map((option) => {
+        {question.options.map((option, index) => {
           const selected = selectedAnswers.includes(option.id);
+          const optionLabel = String.fromCharCode(97 + index);
           return (
             <button
               key={option.id}
@@ -225,7 +226,7 @@ export default function Game() {
                   : 'fantasy-panel text-gild-200'
               }`}
             >
-              {option.text}
+              {optionLabel}. {option.text}
             </button>
           );
         })}
@@ -256,8 +257,12 @@ export default function Game() {
             <p className="font-display text-2xl text-gild-200">正答</p>
             <p className="mt-2 text-xs text-gild-400">
               {question.options
-                .filter((option) => question.correctAnswers.includes(option.id))
-                .map((option) => option.text)
+                .map((option, index) => {
+                  if (!question.correctAnswers.includes(option.id)) return null;
+                  const optionLabel = String.fromCharCode(97 + index);
+                  return `${optionLabel}. ${option.text}`;
+                })
+                .filter((option) => option !== null)
                 .join(' / ')}
             </p>
           </div>
