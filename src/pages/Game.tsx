@@ -31,6 +31,7 @@ export default function Game() {
   const setQuestionIndex = useGameStore((s) => s.setQuestionIndex);
   const setPhase = useGameStore((s) => s.setPhase);
   const seOn = useGameStore((s) => s.seOn);
+  const questionSet = useGameStore((s) => s.questionSet);
 
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [judging, setJudging] = useState(false);
@@ -40,7 +41,8 @@ export default function Game() {
   const playerAnswerRef = useRef<string[]>([]);
   const hasJudgedRef = useRef(false);
 
-  const question = questions[questionIndex];
+  const questionPool = questionSet.length > 0 ? questionSet : questions;
+  const question = questionPool[questionIndex];
 
   const finalizeJudgement = useCallback(() => {
     if (hasJudgedRef.current) return;
@@ -89,7 +91,7 @@ export default function Game() {
     }
 
     const timeout = setTimeout(() => {
-      if (questionIndex >= questions.length - 1) {
+      if (questionIndex >= questionPool.length - 1) {
         setPhase('result');
         navigate('/result');
       } else {
@@ -191,7 +193,7 @@ export default function Game() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between text-xs text-gild-200">
-        <span>Round {questionIndex + 1} / {questions.length}</span>
+        <span>Round {questionIndex + 1} / {questionPool.length}</span>
         <span>残り {timeLeft.toFixed(1)} 秒</span>
       </div>
       <div className="h-2 w-full rounded-full bg-ink-700">

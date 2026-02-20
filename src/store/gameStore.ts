@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Question } from '../data/questions';
 
 export type PlayerStatus = 'idle' | 'answered';
 
@@ -23,11 +24,13 @@ type GameState = {
   bgmOn: boolean;
   seOn: boolean;
   bgmTrack: 'lobby' | 'arena' | 'crimson' | 'arcana' | 'inquisitor';
+  questionSet: Question[];
   setPlayerName: (name: string) => void;
   initPlayers: (name: string) => void;
   updatePlayer: (id: string, data: Partial<Player>) => void;
   resetStatuses: () => void;
   setQuestionIndex: (index: number) => void;
+  setQuestionSet: (questions: Question[]) => void;
   toggleAnswer: (id: string) => void;
   clearAnswers: () => void;
   setPhase: (phase: GamePhase) => void;
@@ -47,6 +50,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   bgmOn: true,
   seOn: true,
   bgmTrack: 'arena',
+  questionSet: [],
   setPlayerName: (name) => set({ playerName: name }),
   initPlayers: (name) => {
     const basePlayers: Player[] = [
@@ -77,6 +81,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       }))
     }),
   setQuestionIndex: (index) => set({ questionIndex: index }),
+  setQuestionSet: (questions) => set({ questionSet: questions }),
   toggleAnswer: (id) => {
     const current = get().selectedAnswers;
     if (current.includes(id)) {

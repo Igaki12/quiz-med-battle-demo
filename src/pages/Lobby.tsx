@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { playTone, unlockAudio } from '../utils/audio';
 import { useGameStore } from '../store/gameStore';
+import { questions } from '../data/questions';
 
 const rooms = [
   { id: 1, name: 'アルカナ図書館', status: '満員' },
@@ -11,11 +12,35 @@ const rooms = [
   { id: 4, name: '蒼穹の書架(テーマBGM2曲ループ)', status: '空きあり' }
 ];
 
+type RoomConfig = {
+  name: string;
+  questionCount: number;
+  filter?: (candidate: (typeof questions)[number]) => boolean;
+};
+
+const roomConfigs: Record<string, RoomConfig> = {
+  'アルカナ図書館': { name: 'アルカナ図書館', questionCount: 5 },
+  '深層迷宮の間': { name: '深層迷宮の間', questionCount: 5 },
+  '星詠みの塔(ランダムBGM5曲ループ)': { name: '星詠みの塔(ランダムBGM5曲ループ)', questionCount: 5 },
+  '蒼穹の書架(テーマBGM2曲ループ)': { name: '蒼穹の書架(テーマBGM2曲ループ)', questionCount: 5 }
+};
+
+const pickRandomQuestions = (count: number, list: typeof questions) => {
+  const pool = [...list];
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, Math.min(count, pool.length));
+};
+
 export default function Lobby() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const seOn = useGameStore((s) => s.seOn);
   const setBgmTrack = useGameStore((s) => s.setBgmTrack);
+  const setQuestionSet = useGameStore((s) => s.setQuestionSet);
+  const setQuestionIndex = useGameStore((s) => s.setQuestionIndex);
 
   const handleEnter = (roomName: string) => {
     if (roomName === '蒼穹の書架') {
@@ -30,6 +55,11 @@ export default function Lobby() {
     unlockAudio();
     setLoading(true);
     if (seOn) playTone(520, 120, 0.12, 'triangle');
+    const config = roomConfigs[roomName] ?? { name: roomName, questionCount: 5 };
+    const filtered = config.filter ? questions.filter(config.filter) : questions;
+    const selected = pickRandomQuestions(config.questionCount, filtered);
+    setQuestionSet(selected);
+    setQuestionIndex(0);
     setTimeout(() => {
       setLoading(false);
       navigate('/waiting');
