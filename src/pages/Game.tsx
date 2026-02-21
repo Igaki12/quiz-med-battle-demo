@@ -252,7 +252,7 @@ export default function Game() {
       </div>
 
       {judging && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/70">
+        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/70 rounded-2xl">
           <div className="fantasy-panel rounded-2xl px-6 py-5 text-center">
             <p className="font-display text-2xl text-gild-200">正答</p>
             <p className="mt-1 text-[10px] text-gild-200">出典: {question.sourceId}</p>
