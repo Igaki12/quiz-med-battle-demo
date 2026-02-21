@@ -21,14 +21,23 @@ export default function Header() {
     if (bgmTrack === 'arena') {
       setBgmPlaylist([
         `${base}audio/The_Final_Question.mp3`,
+        `${base}audio/The_Final_Question.mp3`,
+        `${base}audio/The_Accordion_s_Anarchy.mp3`,
         `${base}audio/The_Accordion_s_Anarchy.mp3`,
         `${base}audio/The_Final_Countdown.mp3`,
+        `${base}audio/The_Final_Countdown.mp3`,
         `${base}audio/The_Grand_Gauntlet.mp3`,
+        `${base}audio/The_Grand_Gauntlet.mp3`,
+        `${base}audio/The_Grand_Triumvirate.mp3`,
         `${base}audio/The_Grand_Triumvirate.mp3`
       ]);
     } else if (bgmTrack === 'crimson') {
       setBgmPlaylist([
         `${base}audio/Crimson_Horizon.mp3`,
+        `${base}audio/Crimson_Horizon.mp3`,
+        `${base}audio/Crimson_Horizon.mp3`,
+        `${base}audio/Aetherium_Arena.mp3`,
+        `${base}audio/Aetherium_Arena.mp3`,
         `${base}audio/Aetherium_Arena.mp3`
       ]);
     } else {
